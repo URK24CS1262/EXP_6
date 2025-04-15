@@ -3,10 +3,12 @@ class Survey:
         self.title = title
         self.questions = questions
         self.responses = []
+        self.feedback_list = []  # Store user feedback
 
-    def collect_response(self, answers):
+    def collect_response(self, answers, feedback):
         if len(answers) == len(self.questions):
             self.responses.append(answers)
+            self.feedback_list.append(feedback)
         else:
             print("Error: Number of answers doesn't match the number of questions.")
 
@@ -18,6 +20,10 @@ class Survey:
             answer_counts = {answer: answers.count(answer) for answer in set(answers)}
             for answer, count in answer_counts.items():
                 print(f" {answer}: {count} votes")
+
+        print("\nCollected Feedback:")
+        for i, feedback in enumerate(self.feedback_list):
+            print(f"Feedback from User {i + 1}: {feedback}")
 
     def display_survey(self):
         print(f"\nSurvey: {self.title}")
@@ -36,8 +42,9 @@ class User:
         for i, question in enumerate(survey.questions):
             answer = input(f"Answer to question {i + 1}: ")
             answers.append(answer)
-        survey.collect_response(answers)
-        print(f"\n{self.name}'s response has been recorded.")
+        feedback = input("Any additional feedback you’d like to share? ")
+        survey.collect_response(answers, feedback)
+        print(f"\n{self.name}'s response and feedback have been recorded.")
 
 
 # Get survey details from user input
@@ -56,8 +63,7 @@ num_users = int(input("Enter the number of users: "))
 for i in range(num_users):
     user_name = input(f"Enter the name of user {i + 1}: ")
     user = User(user_name)
-    # Call the take_survey method for each user
-    user.take_survey(survey)  
+    user.take_survey(survey)
 
 # Analyze and display the results
 survey.analyze_results()
